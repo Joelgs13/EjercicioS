@@ -1,6 +1,7 @@
 module com.example.ejercicios {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
 
 
     opens com.example.ejercicios to javafx.fxml;
