@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="962.0" stylesheets="@../../../../../../../EjercicioM/src/main/resources/estilos/styles.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ejercicios.ListaDeAnimalesController">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="Animales">
+            <items>
+              <MenuItem fx:id="miAniadirAnimal" mnemonicParsing="false" onAction="#aniadirAnimal" text="Añadir" />
+                  <MenuItem fx:id="miEditarAnimal" mnemonicParsing="false" onAction="#editarAnimal" text="Editar" />
+                  <MenuItem fx:id="miInformacionAnimal" mnemonicParsing="false" onAction="#informacionAnimal" text="Informacion" />
+                  <MenuItem fx:id="miBorrarAnimal" mnemonicParsing="false" onAction="#borrarAnimal" text="Borrar" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <FlowPane alignment="CENTER" prefHeight="39.0" prefWidth="962.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" text="CLINICA VETERINARIA">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+         <VBox.margin>
+            <Insets top="50.0" />
+         </VBox.margin>
+      </FlowPane>
+      <GridPane prefHeight="294.0" prefWidth="962.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="480.20001220703125" minWidth="10.0" prefWidth="478.60003662109375" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="483.39996337890625" minWidth="10.0" prefWidth="483.39996337890625" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <HBox alignment="CENTER_RIGHT" prefHeight="330.0" prefWidth="962.0" GridPane.columnIndex="1">
+               <children>
+                  <ImageView fitHeight="169.0" fitWidth="165.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../img/animalitos.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets right="25.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="43.0" prefWidth="962.0" spacing="25.0">
+               <children>
+                  <Label text="Filltrar por Nombre:" />
+                  <TextField fx:id="tfNombre" prefHeight="30.0" prefWidth="292.0" />
+               </children>
+            </HBox>
+         </children>
+      </GridPane>
+      <StackPane prefHeight="501.0" prefWidth="962.0">
+         <children>
+            <TableView fx:id="tablaPriv">
+               <columns>
+                  <TableColumn fx:id="tcId" prefWidth="39.20001220703125" resizable="false" text="ID" />
+                  <TableColumn fx:id="tcNombre" prefWidth="125.59998321533203" resizable="false" text="Nombre" />
+                  <TableColumn fx:id="tcEspecie" prefWidth="135.20001220703125" resizable="false" text="Especie" />
+                  <TableColumn fx:id="tcRaza" prefWidth="104.79998779296875" resizable="false" text="Raza" />
+                  <TableColumn fx:id="tcSexo" prefWidth="96.0" resizable="false" text="Sexo" />
+                  <TableColumn fx:id="tcEdad" prefWidth="72.80001831054688" resizable="false" text="Edad" />
+                  <TableColumn fx:id="tcPeso" prefWidth="70.4000244140625" resizable="false" text="Peso" />
+                  <TableColumn fx:id="tcObservaciones" prefWidth="182.39984130859375" resizable="false" text="Observaciones" />
+                  <TableColumn fx:id="tcFecha" prefWidth="140.8001708984375" resizable="false" text="Fecha de primera consulta" />
+               </columns>
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#editarAnimal" text="Editar" />
+                        <MenuItem fx:id="miInformacionAnimal1" mnemonicParsing="false" onAction="#informacionAnimal" text="Informacion" />
+                        <MenuItem mnemonicParsing="false" onAction="#borrarAnimal" text="Borrar" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
+            </TableView>
+         </children>
+      </StackPane>
+   </children>
+</VBox>
