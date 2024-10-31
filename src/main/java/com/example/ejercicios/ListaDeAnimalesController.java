@@ -102,8 +102,35 @@ public class ListaDeAnimalesController {
 
     @FXML
     void borrarAnimal(ActionEvent event) {
+        // Verificar si hay un animal seleccionado en la tabla
+        AnimalModel animalSeleccionado = tablaAnimales.getSelectionModel().getSelectedItem();
+        if (animalSeleccionado == null) {
+            showAlert("Advertencia", "Debe seleccionar un animal para borrar.", Alert.AlertType.WARNING);
+            return;
+        }
 
+        // Confirmación de eliminación
+        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacion.setTitle("Confirmar eliminación");
+        confirmacion.setHeaderText(null);
+        confirmacion.setContentText("¿Está seguro de que desea eliminar el animal seleccionado?");
+
+        // Espera la respuesta del usuario
+        if (confirmacion.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+            boolean eliminado = DaoAnimales.eliminarAnimal(animalSeleccionado);
+
+            if (eliminado) {
+                // Si se eliminó de la BBDD, quitar de la tabla y mostrar mensaje de éxito
+                tablaAnimales.getItems().remove(animalSeleccionado);
+                showAlert("Éxito", "El animal ha sido eliminado correctamente.", Alert.AlertType.INFORMATION);
+            } else {
+                // Si no se pudo eliminar, mostrar mensaje de error
+                showAlert("Error", "No se pudo eliminar el animal. Inténtelo nuevamente.", Alert.AlertType.ERROR);
+            }
+        }
     }
+
+
 
     @FXML
     void editarAnimal(ActionEvent event) {
@@ -264,6 +291,15 @@ public class ListaDeAnimalesController {
     }
     public static boolean isEsAniadir() {
         return esAniadir;
+    }
+
+    // Método para mostrar alertas
+    private void showAlert(String titulo, String contenido, Alert.AlertType tipo) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(contenido);
+        alert.showAndWait();
     }
 }
 
