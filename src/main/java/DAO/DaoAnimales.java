@@ -92,9 +92,12 @@ public class DaoAnimales {
         PreparedStatement pstmt;
         try {
             connection = new ConexionBBDD();
-            String consulta = "UPDATE Animales SET nombre = ?,especie = ?,raza = ?,sexo = ?,edad = ?,peso = ?,observaciones = ?,fecha_primera_consulta = ?,foto = ? WHERE id = ?";
+
+            // Consulta de actualización sin RETURN_GENERATED_KEYS
+            String consulta = "UPDATE Animales SET nombre = ?, especie = ?, raza = ?, sexo = ?, edad = ?, peso = ?, observaciones = ?, fecha_primera_consulta = ?, foto = ? WHERE id = ?";
             pstmt = connection.getConnection().prepareStatement(consulta);
-            pstmt = connection.getConnection().prepareStatement(consulta, PreparedStatement.RETURN_GENERATED_KEYS);
+
+            // Configuración de parámetros para actualizar con los valores de animalNuevo
             pstmt.setString(1, animalNuevo.getNombre());
             pstmt.setString(2, animalNuevo.getEspecie());
             pstmt.setString(3, animalNuevo.getRaza());
@@ -104,16 +107,23 @@ public class DaoAnimales {
             pstmt.setString(7, animalNuevo.getObservaciones());
             pstmt.setDate(8, Date.valueOf(animalNuevo.getFechaPrimeraConsulta()));
             pstmt.setBlob(9, animalNuevo.getFoto());
-            pstmt.setInt(10,animal.getId());
+            pstmt.setInt(10, animal.getId());  // Usar el ID del objeto original para el WHERE
+
+            // Ejecutar la actualización
             int filasAfectadas = pstmt.executeUpdate();
+
+            // Cierre de recursos
             pstmt.close();
             connection.closeConnection();
+
+            // Retornar verdadero si hubo filas afectadas
             return filasAfectadas > 0;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             return false;
         }
     }
+
 
     public  static int insertarAnimal(AnimalModel animal) {
         ConexionBBDD connection;
