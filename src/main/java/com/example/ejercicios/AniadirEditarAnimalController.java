@@ -5,8 +5,14 @@ import MODEL.AnimalModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class AniadirEditarAnimalController {
@@ -41,6 +47,7 @@ public class AniadirEditarAnimalController {
     @FXML
     private TextField tfSexo;
     private TableView<AnimalModel> tablaAnimales;
+    private Blob imagenBlob;
 
     @FXML
     void cancelar(ActionEvent event) {
@@ -50,7 +57,19 @@ public class AniadirEditarAnimalController {
 
     @FXML
     void cargarImagen(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Seleccionar imagen");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg", "*.gif"));
 
+        File selectedFile = fileChooser.showOpenDialog(((Button) event.getSource()).getScene().getWindow());
+        if (selectedFile != null) {
+            try (FileInputStream fis = new FileInputStream(selectedFile)) {
+                imagenBlob = new javax.sql.rowset.serial.SerialBlob(fis.readAllBytes());
+            } catch (IOException | SQLException e) {
+                showAlert("Error", "No se ha podido cargar la imagen seleccionada.",Alert.AlertType.ERROR);
+                imagenBlob = null; // Dejar el `Blob` en nulo si hay error
+            }
+        }
     }
 
     @FXML
@@ -61,6 +80,11 @@ public class AniadirEditarAnimalController {
             String especie = tfEspecie.getText();
             String raza = tfRaza.getText();
             String sexo = tfSexo.getText();
+
+            if (nombre.isEmpty() || especie.isEmpty() || raza.isEmpty() || sexo.isEmpty()) {
+                showAlert("Error en los datos", "Por favor, complete todos los campos.",Alert.AlertType.ERROR);
+                return;
+            }
 
             // Validación de campos numéricos
             int edad;
@@ -88,17 +112,18 @@ public class AniadirEditarAnimalController {
 
             String observaciones = tfObservaciones.getText();
 
-            // Crear un nuevo objeto AnimalModel
-            AnimalModel animal = new AnimalModel(0, nombre, especie, raza, sexo, edad, peso, observaciones, fechaConsulta, null);
+            // Crear un nuevo objeto AnimalModel con el Blob si está disponible
+            AnimalModel animal = new AnimalModel(
+                    0, nombre, especie, raza, sexo, edad, peso, observaciones,
+                    java.sql.Date.valueOf(fechaConsulta).toLocalDate(), imagenBlob);
 
-            boolean insertado;
             // Intentar insertar en la base de datos
-            if (DaoAnimales.insertarAnimal(animal) != -1){
+            boolean insertado;
+            if (DaoAnimales.insertarAnimal(animal) != -1) {
                 insertado = true;
             } else {
                 insertado = false;
             }
-
 
             if (insertado) {
                 showAlert("Éxito", "El animal ha sido guardado correctamente.", Alert.AlertType.INFORMATION);
@@ -113,6 +138,7 @@ public class AniadirEditarAnimalController {
             showAlert("Error", "Ocurrió un error inesperado.", Alert.AlertType.ERROR);
         }
     }
+
 
     // Método para mostrar alertas
     private void showAlert(String titulo, String contenido, Alert.AlertType tipo) {
