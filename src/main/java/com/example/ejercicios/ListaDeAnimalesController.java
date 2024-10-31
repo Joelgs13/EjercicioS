@@ -17,6 +17,8 @@ import javafx.scene.input.KeyEvent;
 
 import java.sql.SQLException;
 
+import static com.example.ejercicios.HelloApplication.stage;
+
 public class ListaDeAnimalesController {
 
     @FXML
@@ -68,6 +70,7 @@ public class ListaDeAnimalesController {
 
     private FilteredList<AnimalModel> filtro;
     private static ObservableList<AnimalModel> listaTodas;
+    private MenuItem selectedMenuItem;
     @FXML
     void aniadirAnimal(ActionEvent event) {
 
@@ -151,6 +154,44 @@ public class ListaDeAnimalesController {
                 }
             });
         }
+    }
+
+    private void navigateMenu(int direction) {
+        // Obtener todos los elementos de menú en un array
+        MenuItem[] menuItems = {
+                miAniadirAnimal,
+                miEditarAnimal,
+                miBorrarAnimal,
+                miInformacionAnimal,
+        };
+
+        // Encontrar el índice del elemento actualmente seleccionado
+        int currentIndex = -1;
+        for (int i = 0; i < menuItems.length; i++) {
+            if (menuItems[i] == selectedMenuItem) {
+                currentIndex = i;
+                break;
+            }
+        }
+
+        // Calcular el nuevo índice
+        int newIndex = currentIndex + direction;
+
+        // Ajustar el índice si está fuera de límites
+        if (newIndex < 0) newIndex = menuItems.length - 1; // Volver al final si es el inicio
+        else if (newIndex >= menuItems.length) newIndex = 0; // Volver al inicio si es el final
+
+        // Cambiar la selección
+        setSelectedMenuItem(menuItems[newIndex]);
+    }
+
+    private void setSelectedMenuItem(MenuItem menuItem) {
+        if (selectedMenuItem != null) {
+            selectedMenuItem.setStyle(""); // Limpiar el estilo del anterior
+        }
+        selectedMenuItem = menuItem;
+        // Resalta el elemento seleccionado
+        menuItem.setStyle("-fx-background-color: lightblue;");
     }
 
     private void informacionAeropuerto(Object o) {
