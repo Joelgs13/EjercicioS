@@ -73,7 +73,7 @@ public class DaoAnimales {
         ObservableList<AnimalModel> lst = FXCollections.observableArrayList();
         try {
             conection = ConexionBBDD.getConnection();
-            String select = "SELECT id,nombre,especie,raza,sexo,edad,peso,observaciones,fecha_primera_consulta,foto FROM Animales";
+            String select = "SELECT id,nombre,especie,raza,sexo,edad,peso,observaciones,fecha_primera_consulta,foto FROM ejercicios.Animales";
             PreparedStatement pstmt = ConexionBBDD.getConnection().prepareStatement(select);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {

@@ -96,6 +96,7 @@ public class ListaDeAnimalesController {
 
     @FXML
     public void initialize() {
+        //System.out.println("iniciando...");
         try {
             ConexionBBDD con=new ConexionBBDD();
         } catch (SQLException e) {
@@ -118,17 +119,22 @@ public class ListaDeAnimalesController {
         });
 
         //Tabla
+        //System.out.println("antes de cargar");
         listaTodas= DaoAnimales.cargarLista();
+        /*for (AnimalModel am : listaTodas) {
+            System.out.println(am);
+        }
+        System.out.println(listaTodas.size());*/
         tablaAnimales.setItems(listaTodas);
         tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tcId.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        tcId.setCellValueFactory(new PropertyValueFactory<>("especie"));
-        tcId.setCellValueFactory(new PropertyValueFactory<>("raza"));
-        tcId.setCellValueFactory(new PropertyValueFactory<>("sexo"));
-        tcId.setCellValueFactory(new PropertyValueFactory<>("edad"));
-        tcId.setCellValueFactory(new PropertyValueFactory<>("peso"));
-        tcId.setCellValueFactory(new PropertyValueFactory<>("observaciones"));
-        tcId.setCellValueFactory(new PropertyValueFactory<>("fecha_primera_consulta"));
+        tcNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        tcEspecie.setCellValueFactory(new PropertyValueFactory<>("especie"));
+        tcRaza.setCellValueFactory(new PropertyValueFactory<>("raza"));
+        tcSexo.setCellValueFactory(new PropertyValueFactory<>("sexo"));
+        tcEdad.setCellValueFactory(new PropertyValueFactory<>("edad"));
+        tcPeso.setCellValueFactory(new PropertyValueFactory<>("peso"));
+        tcObservaciones.setCellValueFactory(new PropertyValueFactory<>("observaciones"));
+        tcFecha.setCellValueFactory(new PropertyValueFactory<>("fechaPrimeraConsulta"));
         filtro=new FilteredList<AnimalModel>(listaTodas);
         tablaAnimales.setItems(listaTodas);
 
