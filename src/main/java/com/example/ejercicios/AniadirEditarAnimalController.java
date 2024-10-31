@@ -17,11 +17,24 @@ import java.time.LocalDate;
 
 public class AniadirEditarAnimalController {
 
-    @FXML
-    private DatePicker fechaPrimeraConsulta;
+    public DatePicker getFechaPrimeraConsulta() {
+        return fechaPrimeraConsulta;
+    }
+
+    public void setFechaPrimeraConsulta(DatePicker fechaPrimeraConsulta) {
+        this.fechaPrimeraConsulta = fechaPrimeraConsulta;
+    }
+
+    public Blob getImagenBlob() {
+        return imagenBlob;
+    }
+
+    public void setImagenBlob(Blob imagenBlob) {
+        this.imagenBlob = imagenBlob;
+    }
 
     @FXML
-    private Label lbNumeroDeSocios;
+    private DatePicker fechaPrimeraConsulta;
 
     @FXML
     private TextField tfEdad;
@@ -33,9 +46,6 @@ public class AniadirEditarAnimalController {
     private TextField tfNombre;
 
     @FXML
-    private TextField tfNumeroDeSocios;
-
-    @FXML
     private TextField tfObservaciones;
 
     @FXML
@@ -44,10 +54,68 @@ public class AniadirEditarAnimalController {
     @FXML
     private TextField tfRaza;
 
+    public TextField getTfEdad() {
+        return tfEdad;
+    }
+
+    public void setTfEdad(TextField tfEdad) {
+        this.tfEdad = tfEdad;
+    }
+
+    public TextField getTfEspecie() {
+        return tfEspecie;
+    }
+
+    public void setTfEspecie(TextField tfEspecie) {
+        this.tfEspecie = tfEspecie;
+    }
+
+    public TextField getTfNombre() {
+        return tfNombre;
+    }
+
+    public void setTfNombre(TextField tfNombre) {
+        this.tfNombre = tfNombre;
+    }
+
+    public TextField getTfObservaciones() {
+        return tfObservaciones;
+    }
+
+    public void setTfObservaciones(TextField tfObservaciones) {
+        this.tfObservaciones = tfObservaciones;
+    }
+
+    public TextField getTfPeso() {
+        return tfPeso;
+    }
+
+    public void setTfPeso(TextField tfPeso) {
+        this.tfPeso = tfPeso;
+    }
+
+    public TextField getTfRaza() {
+        return tfRaza;
+    }
+
+    public void setTfRaza(TextField tfRaza) {
+        this.tfRaza = tfRaza;
+    }
+
+    public TextField getTfSexo() {
+        return tfSexo;
+    }
+
+    public void setTfSexo(TextField tfSexo) {
+        this.tfSexo = tfSexo;
+    }
+
     @FXML
     private TextField tfSexo;
     private TableView<AnimalModel> tablaAnimales;
     private Blob imagenBlob;
+    private AnimalModel animalSeleccionado;
+
 
     @FXML
     void cancelar(ActionEvent event) {
@@ -82,7 +150,7 @@ public class AniadirEditarAnimalController {
             String sexo = tfSexo.getText();
 
             if (nombre.isEmpty() || especie.isEmpty() || raza.isEmpty() || sexo.isEmpty()) {
-                showAlert("Error en los datos", "Por favor, complete todos los campos.",Alert.AlertType.ERROR);
+                showAlert("Error en los datos", "Por favor, complete todos los campos.", Alert.AlertType.ERROR);
                 return;
             }
 
@@ -112,32 +180,41 @@ public class AniadirEditarAnimalController {
 
             String observaciones = tfObservaciones.getText();
 
-            // Crear un nuevo objeto AnimalModel con el Blob si está disponible
+            // Crear o actualizar un objeto AnimalModel con el Blob
             AnimalModel animal = new AnimalModel(
-                    0, nombre, especie, raza, sexo, edad, peso, observaciones,
+                    (animalSeleccionado != null) ? animalSeleccionado.getId() : 0, // Usar ID existente si estamos en edición
+                    nombre, especie, raza, sexo, edad, peso, observaciones,
                     java.sql.Date.valueOf(fechaConsulta).toLocalDate(), imagenBlob);
 
-            // Intentar insertar en la base de datos
-            boolean insertado;
-            if (DaoAnimales.insertarAnimal(animal) != -1) {
-                insertado = true;
-            } else {
-                insertado = false;
+            boolean operacionExitosa;
+
+            if (animalSeleccionado != null) {  // Editar animal si es un objeto existente
+                operacionExitosa = DaoAnimales.modificarAnimal(animalSeleccionado, animal);
+            } else { // Crear un nuevo animal si no hay objeto seleccionado
+                operacionExitosa = DaoAnimales.insertarAnimal(animal) != -1;
+                if (operacionExitosa) {
+                    tablaAnimales.getItems().add(animal); // Agregar a la tabla si es una inserción
+                }
             }
 
-            if (insertado) {
-                showAlert("Éxito", "El animal ha sido guardado correctamente.", Alert.AlertType.INFORMATION);
-                tablaAnimales.getItems().add(animal); // Agregar a la tabla
-                tablaAnimales.refresh(); // Actualizar tabla
+            if (operacionExitosa) {
+                showAlert("Éxito", "El animal ha sido " +
+                        (animalSeleccionado != null ? "actualizado" : "guardado") +
+                        " correctamente.", Alert.AlertType.INFORMATION);
+                tablaAnimales.refresh(); // Refrescar tabla
                 cerrarVentana(event); // Cerrar la ventana modal
             } else {
-                showAlert("Error", "No se pudo guardar el animal. Inténtelo nuevamente.", Alert.AlertType.ERROR);
+                showAlert("Error", "No se pudo " +
+                        (animalSeleccionado != null ? "actualizar" : "guardar") +
+                        " el animal. Inténtelo nuevamente.", Alert.AlertType.ERROR);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Ocurrió un error inesperado.", Alert.AlertType.ERROR);
         }
     }
+
 
 
     // Método para mostrar alertas
@@ -159,4 +236,37 @@ public class AniadirEditarAnimalController {
     public void setTablaAnimales(TableView<AnimalModel> idTablaAnimales) {
         this.tablaAnimales = idTablaAnimales;
     }
+
+    public void cargarAnimal(AnimalModel animal) {
+        this.animalSeleccionado = animal;
+
+        // Rellenar los campos del formulario con los datos de `animalSeleccionado`
+        tfNombre.setText(animal.getNombre());
+        tfEspecie.setText(animal.getEspecie());
+        tfRaza.setText(animal.getRaza());
+        tfSexo.setText(animal.getSexo());
+        tfEdad.setText(String.valueOf(animal.getEdad()));
+        tfPeso.setText(String.valueOf(animal.getPeso()));
+        tfObservaciones.setText(animal.getObservaciones());
+        fechaPrimeraConsulta.setValue(animal.getFechaPrimeraConsulta());
+        imagenBlob = animal.getFoto(); // Establecer el Blob de imagen
+    }
+
+    // Método para crear el objeto modificado con los datos actuales del formulario
+    public AnimalModel crearAnimalDesdeFormulario() {
+        return new AnimalModel(
+                animalSeleccionado != null ? animalSeleccionado.getId() : 0,  // Mantener el ID si es edición
+                tfNombre.getText(),
+                tfEspecie.getText(),
+                tfRaza.getText(),
+                tfSexo.getText(),
+                Integer.parseInt(tfEdad.getText()),
+                Integer.parseInt(tfPeso.getText()),
+                tfObservaciones.getText(),
+                fechaPrimeraConsulta.getValue(),
+                imagenBlob  // Mantener la imagen existente o asignar una nueva si se cargó
+        );
+    }
+
+
 }

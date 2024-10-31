@@ -86,11 +86,6 @@
             <Button mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />
          </children>
       </HBox>
-      <TextField fx:id="tfNumeroDeSocios" maxWidth="-Infinity" prefHeight="26.0" prefWidth="110.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="8">
-         <GridPane.margin>
-            <Insets left="10.0" />
-         </GridPane.margin>
-      </TextField>
       <Button mnemonicParsing="false" onAction="#cargarImagen" text="Cargar imagen..." GridPane.columnIndex="1" GridPane.rowIndex="9">
          <GridPane.margin>
             <Insets left="10.0" />
