@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -14,6 +15,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
@@ -76,7 +78,26 @@ public class ListaDeAnimalesController {
     private static boolean borrar=true;
     @FXML
     void aniadirAnimal(ActionEvent event) {
-
+        esAniadir=true;
+        s=new Stage();
+        Scene scene;
+        try {
+            FXMLLoader controlador = new FXMLLoader(HelloApplication.class.getResource("aniadirEditarAnimal.fxml"));
+            scene = new Scene(controlador.load());
+            s.setTitle("AÑADIR ANIMAL");
+            s.setScene(scene);
+            AniadirEditarAnimalController controller = controlador.getController();
+            controller.setTablaAnimales(tablaAnimales);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        s.setResizable(false);
+        s.initOwner(HelloApplication.getStage());
+        s.initModality(javafx.stage.Modality.WINDOW_MODAL);
+        s.showAndWait();
+        filtrarPorNombre();
+        tablaAnimales.refresh();
+        initialize();
     }
 
     @FXML
@@ -90,11 +111,6 @@ public class ListaDeAnimalesController {
     }
 
     @FXML
-    void informacionAnimal(ActionEvent event) {
-
-    }
-
-    @FXML
     public void initialize() {
         //System.out.println("iniciando...");
         try {
@@ -104,17 +120,10 @@ public class ListaDeAnimalesController {
         }
         tfNombre.setOnKeyReleased(event -> filtrarPorNombre());
 
-        // Configurar el evento de doble clic en la tabla privada
+        // Configurar el evento de doble clic en la tabla
         tablaAnimales.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) { // Doble clic
-                informacionAeropuerto(null); // Llamamos a la función con un evento nulo
-            }
-        });
-
-        // Configurar el evento de doble clic en la tabla pública
-        tablaAnimales.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) { // Doble clic
-                informacionAeropuerto(null); // Llamamos a la función con un evento nulo
+                informacionAnimal(null); // Llamamos a la función con un evento nulo
             }
         });
 
@@ -202,8 +211,8 @@ public class ListaDeAnimalesController {
         // Resalta el elemento seleccionado
         menuItem.setStyle("-fx-background-color: lightblue;");
     }
-
-    private void informacionAeropuerto(Object o) {
+    @FXML
+    private void informacionAnimal(ActionEvent event) {
         if (tablaAnimales.getSelectionModel().getSelectedItem() != null) {
             Alert al = new Alert(Alert.AlertType.INFORMATION);
             al.setHeaderText(null);
