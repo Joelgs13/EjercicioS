@@ -10,13 +10,14 @@ import java.time.LocalDate;
 
 public class DaoAnimales {
 
+    private static Connection conection;
+
     public static ObservableList<AnimalModel> selectTodos() {
-        ConexionBBDD connection;
         ObservableList<AnimalModel> animales = FXCollections.observableArrayList();
         try{
-            connection = new ConexionBBDD();
+            conection = ConexionBBDD.getConnection();
             String consulta = "SELECT id,nombre,especie,raza,sexo,edad,peso,observaciones,fecha_primera_consulta,foto FROM Animales";
-            PreparedStatement pstmt = connection.getConnection().prepareStatement(consulta);
+            PreparedStatement pstmt = conection.prepareStatement(consulta);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 int id_animal = rs.getInt("id");
@@ -33,7 +34,6 @@ public class DaoAnimales {
                 animales.add(animal);
             }
             rs.close();
-            connection.closeConnection();
         }catch (SQLException e) {
             System.err.println(e.getMessage());
         }
@@ -42,12 +42,11 @@ public class DaoAnimales {
 
 
     public static AnimalModel selectPorId(int id) {
-        ConexionBBDD connection;
         AnimalModel animal = null;
         try {
-            connection = new ConexionBBDD();
+            conection = ConexionBBDD.getConnection();
             String select = "SELECT id,nombre,especie,raza,sexo,edad,peso,observaciones,fecha_primera_consulta,foto FROM Animales WHERE id = ?";
-            PreparedStatement pstmt = connection.getConnection().prepareStatement(select);
+            PreparedStatement pstmt = conection.prepareStatement(select);
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -64,11 +63,28 @@ public class DaoAnimales {
                 animal = new AnimalModel(id_animal,nombre,especie,raza,sexo,edad,peso,observaciones,fecha_primera_consulta,foto);
             }
             rs.close();
-            connection.closeConnection();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
         return animal;
+    }
+
+    public static ObservableList<AnimalModel> cargarLista(){
+        ObservableList<AnimalModel> lst = FXCollections.observableArrayList();
+        try {
+            conection = ConexionBBDD.getConnection();
+            String select = "SELECT id,nombre,especie,raza,sexo,edad,peso,observaciones,fecha_primera_consulta,foto FROM Animales";
+            PreparedStatement pstmt = ConexionBBDD.getConnection().prepareStatement(select);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                AnimalModel modelo = new AnimalModel(rs.getInt("id"),rs.getString("nombre"),rs.getString("especie"),rs.getString("raza"),rs.getString("sexo"),rs.getInt("edad"),rs.getInt("peso"),rs.getString("observaciones"),rs.getDate("fecha_primera_consulta").toLocalDate(),rs.getBlob("foto"));
+                modelo.setId(rs.getInt("id"));
+                lst.add(modelo);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lst;
     }
 
     public static boolean modificarAnimal(AnimalModel animal, AnimalModel animalNuevo) {

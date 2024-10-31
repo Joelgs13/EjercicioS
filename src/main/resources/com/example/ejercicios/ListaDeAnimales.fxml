@@ -80,7 +80,7 @@
       </GridPane>
       <StackPane prefHeight="501.0" prefWidth="962.0">
          <children>
-            <TableView fx:id="tablaPriv">
+            <TableView fx:id="tablaAnimales">
                <columns>
                   <TableColumn fx:id="tcId" prefWidth="39.20001220703125" resizable="false" text="ID" />
                   <TableColumn fx:id="tcNombre" prefWidth="125.59998321533203" resizable="false" text="Nombre" />
