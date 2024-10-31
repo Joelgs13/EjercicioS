@@ -3,8 +3,6 @@ package com.example.ejercicios;
 import BBDD.ConexionBBDD;
 import DAO.DaoAnimales;
 import MODEL.AnimalModel;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
@@ -14,8 +12,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 import static com.example.ejercicios.HelloApplication.stage;
 
@@ -39,31 +39,31 @@ public class ListaDeAnimalesController {
     private MenuItem miInformacionAnimal1;
 
     @FXML
-    private TableColumn<?, ?> tcEdad;
+    private TableColumn<AnimalModel, Integer> tcEdad;
 
     @FXML
-    private TableColumn<?, ?> tcEspecie;
+    private TableColumn<AnimalModel, String> tcEspecie;
 
     @FXML
-    private TableColumn<?, ?> tcFecha;
+    private TableColumn<AnimalModel, LocalDate> tcFecha;
 
     @FXML
     private TableColumn<?, ?> tcId;
 
     @FXML
-    private TableColumn<?, ?> tcNombre;
+    private TableColumn<AnimalModel, String> tcNombre;
 
     @FXML
-    private TableColumn<?, ?> tcObservaciones;
+    private TableColumn<AnimalModel, String> tcObservaciones;
 
     @FXML
-    private TableColumn<?, ?> tcPeso;
+    private TableColumn<AnimalModel, Integer> tcPeso;
 
     @FXML
-    private TableColumn<?, ?> tcRaza;
+    private TableColumn<AnimalModel, String> tcRaza;
 
     @FXML
-    private TableColumn<?, ?> tcSexo;
+    private TableColumn<AnimalModel, String> tcSexo;
 
     @FXML
     private TextField tfNombre;
@@ -71,6 +71,9 @@ public class ListaDeAnimalesController {
     private FilteredList<AnimalModel> filtro;
     private static ObservableList<AnimalModel> listaTodas;
     private MenuItem selectedMenuItem;
+    private static Stage s;
+    private static boolean esAniadir;
+    private static boolean borrar=true;
     @FXML
     void aniadirAnimal(ActionEvent event) {
 
@@ -237,4 +240,16 @@ public class ListaDeAnimalesController {
         });
         tablaAnimales.setItems(filtro);
     }
+    public static ObservableList<AnimalModel> getListaTodas() {
+        return listaTodas;
+    }
+
+    public static Stage getS() {
+        return s;
+    }
+    public static boolean isEsAniadir() {
+        return esAniadir;
+    }
 }
+
+
