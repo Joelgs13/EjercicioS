@@ -25,65 +25,75 @@ import java.time.LocalDate;
 
 import static com.example.ejercicios.HelloApplication.stage;
 
+/**
+ * Controlador de la vista que muestra y gestiona la lista de animales.
+ */
 public class ListaDeAnimalesController {
 
     @FXML
-    public TableView<AnimalModel> tablaAnimales;
-    @FXML
-    private MenuItem miAniadirAnimal;
+    public TableView<AnimalModel> tablaAnimales; // Tabla que muestra la lista de animales.
 
     @FXML
-    private MenuItem miBorrarAnimal;
+    private MenuItem miAniadirAnimal; // Opción del menú para añadir un nuevo animal.
 
     @FXML
-    private MenuItem miEditarAnimal;
+    private MenuItem miBorrarAnimal; // Opción del menú para borrar un animal.
 
     @FXML
-    private MenuItem miInformacionAnimal;
+    private MenuItem miEditarAnimal; // Opción del menú para editar un animal.
 
     @FXML
-    private MenuItem miInformacionAnimal1;
+    private MenuItem miInformacionAnimal; // Opción del menú para mostrar información de un animal.
 
     @FXML
-    private TableColumn<AnimalModel, Integer> tcEdad;
+    private MenuItem miInformacionAnimal1; // Otra opción del menú para mostrar información.
 
     @FXML
-    private TableColumn<AnimalModel, String> tcEspecie;
+    private TableColumn<AnimalModel, Integer> tcEdad; // Columna de la tabla que muestra la edad del animal.
 
     @FXML
-    private TableColumn<AnimalModel, LocalDate> tcFecha;
+    private TableColumn<AnimalModel, String> tcEspecie; // Columna de la tabla que muestra la especie del animal.
 
     @FXML
-    private TableColumn<AnimalModel, Integer> tcId;
+    private TableColumn<AnimalModel, LocalDate> tcFecha; // Columna de la tabla que muestra la fecha de la primera consulta.
 
     @FXML
-    private TableColumn<AnimalModel, String> tcNombre;
+    private TableColumn<AnimalModel, Integer> tcId; // Columna de la tabla que muestra el ID del animal.
 
     @FXML
-    private TableColumn<AnimalModel, String> tcObservaciones;
+    private TableColumn<AnimalModel, String> tcNombre; // Columna de la tabla que muestra el nombre del animal.
 
     @FXML
-    private TableColumn<AnimalModel, Integer> tcPeso;
+    private TableColumn<AnimalModel, String> tcObservaciones; // Columna de la tabla que muestra observaciones del animal.
 
     @FXML
-    private TableColumn<AnimalModel, String> tcRaza;
+    private TableColumn<AnimalModel, Integer> tcPeso; // Columna de la tabla que muestra el peso del animal.
 
     @FXML
-    private TableColumn<AnimalModel, String> tcSexo;
+    private TableColumn<AnimalModel, String> tcRaza; // Columna de la tabla que muestra la raza del animal.
 
     @FXML
-    private TextField tfNombre;
+    private TableColumn<AnimalModel, String> tcSexo; // Columna de la tabla que muestra el sexo del animal.
 
-    private FilteredList<AnimalModel> filtro;
-    private static ObservableList<AnimalModel> listaTodas;
-    private MenuItem selectedMenuItem;
-    private static Stage s;
-    private static boolean esAniadir;
-    private static boolean borrar=true;
+    @FXML
+    private TextField tfNombre; // Campo de texto para filtrar animales por nombre.
+
+    private FilteredList<AnimalModel> filtro; // Lista filtrada de animales.
+    private static ObservableList<AnimalModel> listaTodas; // Lista de todos los animales.
+    private MenuItem selectedMenuItem; // Elemento del menú actualmente seleccionado.
+    private static Stage s; // Ventana para añadir o editar animales.
+    private static boolean esAniadir; // Bandera para determinar si se está añadiendo un animal.
+    private static boolean borrar = true; // Bandera para habilitar o deshabilitar la opción de borrar.
+
+    /**
+     * Método que se llama al hacer clic en la opción para añadir un animal.
+     *
+     * @param event El evento de acción que se produce al hacer clic.
+     */
     @FXML
     void aniadirAnimal(ActionEvent event) {
-        esAniadir=true;
-        s=new Stage();
+        esAniadir = true;
+        s = new Stage();
         Scene scene;
         try {
             FXMLLoader controlador = new FXMLLoader(HelloApplication.class.getResource("aniadirEditarAnimal.fxml"));
@@ -104,6 +114,11 @@ public class ListaDeAnimalesController {
         initialize();
     }
 
+    /**
+     * Método que se llama al hacer clic en la opción para borrar un animal.
+     *
+     * @param event El evento de acción que se produce al hacer clic.
+     */
     @FXML
     void borrarAnimal(ActionEvent event) {
         // Verificar si hay un animal seleccionado en la tabla
@@ -134,8 +149,11 @@ public class ListaDeAnimalesController {
         }
     }
 
-
-
+    /**
+     * Método que se llama al hacer clic en la opción para editar un animal.
+     *
+     * @param event El evento de acción que se produce al hacer clic.
+     */
     @FXML
     void editarAnimal(ActionEvent event) {
         esAniadir = false; // Modo edición
@@ -170,13 +188,14 @@ public class ListaDeAnimalesController {
         }
     }
 
-
-
+    /**
+     * Método que se llama al inicializar el controlador. Configura la tabla y los eventos.
+     */
     @FXML
     public void initialize() {
         //System.out.println("iniciando...");
         try {
-            ConexionBBDD con=new ConexionBBDD();
+            ConexionBBDD con = new ConexionBBDD();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -191,7 +210,7 @@ public class ListaDeAnimalesController {
 
         //Tabla
         //System.out.println("antes de cargar");
-        listaTodas= DaoAnimales.cargarLista();
+        listaTodas = DaoAnimales.cargarLista();
         /*for (AnimalModel am : listaTodas) {
             System.out.println(am);
         }
@@ -206,12 +225,15 @@ public class ListaDeAnimalesController {
         tcPeso.setCellValueFactory(new PropertyValueFactory<>("peso"));
         tcObservaciones.setCellValueFactory(new PropertyValueFactory<>("observaciones"));
         tcFecha.setCellValueFactory(new PropertyValueFactory<>("fechaPrimeraConsulta"));
-        filtro=new FilteredList<AnimalModel>(listaTodas);
+        filtro = new FilteredList<AnimalModel>(listaTodas);
         tablaAnimales.setItems(listaTodas);
 
         addMenuNavigationhandlers();
     }
 
+    /**
+     * Método para asociar las acciones de los elementos del menú.
+     */
     private void addMenuNavigationhandlers() {
         // Asociar acciones a los elementos del menú
         miAniadirAnimal.setOnAction(this::aniadirAnimal);
@@ -220,7 +242,7 @@ public class ListaDeAnimalesController {
         miInformacionAnimal.setOnAction(this::informacionAnimal);
 
         // Agregar un EventFilter al root de la escena
-        Scene scene = stage.getScene();// Asumiendo que el MenuItem es parte de un Popup
+        Scene scene = stage.getScene(); // Asumiendo que el MenuItem es parte de un Popup
         if (scene != null) {
             scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                 if (selectedMenuItem != null) {
@@ -236,6 +258,11 @@ public class ListaDeAnimalesController {
         }
     }
 
+    /**
+     * Método para navegar por los elementos del menú usando las teclas de dirección.
+     *
+     * @param direction La dirección en la que navegar (-1 para arriba, 1 para abajo).
+     */
     private void navigateMenu(int direction) {
         // Obtener todos los elementos de menú en un array
         MenuItem[] menuItems = {
@@ -265,6 +292,11 @@ public class ListaDeAnimalesController {
         setSelectedMenuItem(menuItems[newIndex]);
     }
 
+    /**
+     * Método para establecer el elemento del menú seleccionado y resaltar su apariencia.
+     *
+     * @param menuItem El elemento del menú a seleccionar.
+     */
     private void setSelectedMenuItem(MenuItem menuItem) {
         if (selectedMenuItem != null) {
             selectedMenuItem.setStyle(""); // Limpiar el estilo del anterior
@@ -273,6 +305,12 @@ public class ListaDeAnimalesController {
         // Resalta el elemento seleccionado
         menuItem.setStyle("-fx-background-color: lightblue;");
     }
+
+    /**
+     * Método que muestra la información del animal seleccionado en un cuadro de diálogo.
+     *
+     * @param event El evento de acción que se produce al hacer clic.
+     */
     @FXML
     private void informacionAnimal(ActionEvent event) {
         if (tablaAnimales.getSelectionModel().getSelectedItem() != null) {
@@ -301,12 +339,13 @@ public class ListaDeAnimalesController {
             al.setContentText(str.toString());
             al.showAndWait();
         }
-
     }
 
+    /**
+     * Método para filtrar la lista de animales según el texto ingresado en el campo de nombre.
+     */
     private void filtrarPorNombre() {
         String filtroTexto = tfNombre.getText().toLowerCase();  // Convertir el texto del filtro a minúsculas para hacer una búsqueda no sensible a mayúsculas/minúsculas
-
 
         filtro.setPredicate(animal -> {
             if (filtroTexto == null || filtroTexto.isEmpty()) {
@@ -317,18 +356,41 @@ public class ListaDeAnimalesController {
         });
         tablaAnimales.setItems(filtro);
     }
+
+    /**
+     * Método para obtener la lista completa de animales.
+     *
+     * @return ObservableList de AnimalModel con todos los animales.
+     */
     public static ObservableList<AnimalModel> getListaTodas() {
         return listaTodas;
     }
 
+    /**
+     * Método para obtener la instancia de la ventana de añadir o editar animales.
+     *
+     * @return La ventana actual (Stage).
+     */
     public static Stage getS() {
         return s;
     }
+
+    /**
+     * Método para verificar si se está en modo añadir.
+     *
+     * @return true si se está añadiendo un animal, false de lo contrario.
+     */
     public static boolean isEsAniadir() {
         return esAniadir;
     }
 
-    // Método para mostrar alertas
+    /**
+     * Método para mostrar alertas.
+     *
+     * @param titulo   El título de la alerta.
+     * @param contenido El contenido de la alerta.
+     * @param tipo      El tipo de alerta a mostrar.
+     */
     private void showAlert(String titulo, String contenido, Alert.AlertType tipo) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
@@ -337,5 +399,3 @@ public class ListaDeAnimalesController {
         alert.showAndWait();
     }
 }
-
-

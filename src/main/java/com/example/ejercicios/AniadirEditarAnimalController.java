@@ -24,13 +24,15 @@ public class AniadirEditarAnimalController {
     @FXML
     private TextField tfNombre, tfEspecie, tfRaza, tfSexo, tfEdad, tfPeso, tfObservaciones;
 
-    private TableView<AnimalModel> tablaAnimales;
-    private Blob imagenBlob;
-    private AnimalModel animalSeleccionado;
+    private TableView<AnimalModel> tablaAnimales; // Tabla para mostrar los animales
+    private Blob imagenBlob; // Blob para almacenar la imagen del animal
+    private AnimalModel animalSeleccionado; // Animal que se está editando o añadiendo
 
-
-
-    // Método para cargar la imagen desde un archivo
+    /**
+     * Método para cargar la imagen desde un archivo.
+     *
+     * @param event El evento de acción que se produce al hacer clic.
+     */
     @FXML
     void cargarImagen(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -48,14 +50,22 @@ public class AniadirEditarAnimalController {
         }
     }
 
+    /**
+     * Método para cancelar la operación actual y cerrar la ventana.
+     *
+     * @param event El evento de acción que se produce al hacer clic.
+     */
     @FXML
     void cancelar(ActionEvent event) {
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         stage.close();
     }
 
-
-    // Método para guardar o actualizar el animal
+    /**
+     * Método para guardar o actualizar el animal.
+     *
+     * @param event El evento de acción que se produce al hacer clic.
+     */
     @FXML
     void guardar(ActionEvent event) {
         // Validación de datos ingresados
@@ -84,10 +94,13 @@ public class AniadirEditarAnimalController {
         }
         tablaAnimales.refresh();
         //no hay manera de actualizar la tabla al editar
-
     }
 
-    // Método para cargar los datos del animal en el formulario (modo edición)
+    /**
+     * Método para cargar los datos del animal en el formulario (modo edición).
+     *
+     * @param animal El animal que se desea cargar en el formulario.
+     */
     public void cargarAnimal(AnimalModel animal) {
         this.animalSeleccionado = animal;
         tfNombre.setText(animal.getNombre());
@@ -101,7 +114,11 @@ public class AniadirEditarAnimalController {
         imagenBlob = animal.getFoto();
     }
 
-    // Método para crear un objeto AnimalModel a partir de los datos del formulario
+    /**
+     * Método para crear un objeto AnimalModel a partir de los datos del formulario.
+     *
+     * @return Un nuevo objeto AnimalModel con los datos ingresados.
+     */
     private AnimalModel crearAnimalDesdeFormulario() {
         return new AnimalModel(
                 animalSeleccionado != null ? animalSeleccionado.getId() : 0,  // Mantener el ID si es edición
@@ -117,7 +134,11 @@ public class AniadirEditarAnimalController {
         );
     }
 
-    // Método para validar los datos ingresados en el formulario
+    /**
+     * Método para validar los datos ingresados en el formulario.
+     *
+     * @return true si los datos son válidos, false en caso contrario.
+     */
     private boolean validarFormulario() {
         if (tfNombre.getText().isEmpty() || tfEspecie.getText().isEmpty() || tfRaza.getText().isEmpty() || tfSexo.getText().isEmpty()) {
             showAlert("Error en los datos", "Por favor, complete todos los campos.", Alert.AlertType.ERROR);
@@ -142,7 +163,13 @@ public class AniadirEditarAnimalController {
         return true;
     }
 
-    // Método para mostrar alertas
+    /**
+     * Método para mostrar alertas.
+     *
+     * @param titulo   El título de la alerta.
+     * @param contenido El contenido de la alerta.
+     * @param tipo      El tipo de alerta a mostrar.
+     */
     private void showAlert(String titulo, String contenido, Alert.AlertType tipo) {
         Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
@@ -151,47 +178,23 @@ public class AniadirEditarAnimalController {
         alert.showAndWait();
     }
 
-    // Método para cerrar la ventana modal
+    /**
+     * Método para cerrar la ventana modal.
+     *
+     * @param event El evento de acción que se produce al hacer clic.
+     */
     private void cerrarVentana(ActionEvent event) {
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         stage.close();
     }
 
-    // Setter para inyectar la referencia a la tabla de animales
+    /**
+     * Setter para inyectar la referencia a la tabla de animales.
+     *
+     * @param tablaAnimales La tabla donde se mostrarán los animales.
+     */
     public void setTablaAnimales(TableView<AnimalModel> tablaAnimales) {
         this.tablaAnimales = tablaAnimales;
-    }
-
-    public TextField getTfNombre() {
-        return tfNombre;
-    }
-
-    public TextField getTfEspecie() {
-        return tfEspecie;
-    }
-
-    public TextField getTfRaza() {
-        return tfRaza;
-    }
-
-    public TextField getTfSexo() {
-        return tfSexo;
-    }
-
-    public TextField getTfEdad() {
-        return tfEdad;
-    }
-
-    public TextField getTfPeso() {
-        return tfPeso;
-    }
-
-    public TextField getTfObservaciones() {
-        return tfObservaciones;
-    }
-
-    public DatePicker getFechaPrimeraConsulta() {
-        return fechaPrimeraConsulta;
     }
 
 }
