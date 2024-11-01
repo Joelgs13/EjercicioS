@@ -93,26 +93,33 @@ public class DaoAnimales {
         try {
             connection = new ConexionBBDD();
 
-            // Consulta de actualización sin RETURN_GENERATED_KEYS
             String consulta = "UPDATE Animales SET nombre = ?, especie = ?, raza = ?, sexo = ?, edad = ?, peso = ?, observaciones = ?, fecha_primera_consulta = ?, foto = ? WHERE id = ?";
             pstmt = connection.getConnection().prepareStatement(consulta);
 
-            // Configuración de parámetros para actualizar con los valores de animalNuevo
-            pstmt.setString(1, animalNuevo.getNombre());
-            pstmt.setString(2, animalNuevo.getEspecie());
-            pstmt.setString(3, animalNuevo.getRaza());
-            pstmt.setString(4, animalNuevo.getSexo());
-            pstmt.setInt(5, animalNuevo.getEdad());
-            pstmt.setInt(6, animalNuevo.getPeso());
-            pstmt.setString(7, animalNuevo.getObservaciones());
-            pstmt.setDate(8, Date.valueOf(animalNuevo.getFechaPrimeraConsulta()));
-            pstmt.setBlob(9, animalNuevo.getFoto());
-            pstmt.setInt(10, animal.getId());  // Usar el ID del objeto original para el WHERE
+            // Configuración de parámetros con verificaciones de null
+            pstmt.setString(1, animalNuevo.getNombre() != null ? animalNuevo.getNombre() : "");
+            pstmt.setString(2, animalNuevo.getEspecie() != null ? animalNuevo.getEspecie() : "");
+            pstmt.setString(3, animalNuevo.getRaza() != null ? animalNuevo.getRaza() : "");
+            pstmt.setString(4, animalNuevo.getSexo() != null ? animalNuevo.getSexo() : "");
+
+            Integer animalNuevoEdad= animalNuevo.getEdad();
+            Integer animalNuevoPeso= animalNuevo.getEdad();
+
+            // Usar el valor o un predeterminado si es null
+            pstmt.setInt(5, animalNuevoEdad != null ? animalNuevo.getEdad() : 0);  // edad predeterminada 0
+            pstmt.setInt(6, animalNuevoPeso != null ? animalNuevo.getPeso() : 0);  // peso predeterminado 0
+
+            pstmt.setString(7, animalNuevo.getObservaciones() != null ? animalNuevo.getObservaciones() : "");
+            pstmt.setDate(8, animalNuevo.getFechaPrimeraConsulta() != null ? Date.valueOf(animalNuevo.getFechaPrimeraConsulta()) : null);
+            pstmt.setBlob(9, animalNuevo.getFoto() != null ? animalNuevo.getFoto() : null);
+
+            // ID en WHERE
+            pstmt.setInt(10, animal.getId()); // Suponiendo que getId() siempre devuelve un valor válido de int
 
             // Ejecutar la actualización
             int filasAfectadas = pstmt.executeUpdate();
 
-            // Cierre de recursos
+            // Cerrar recursos
             pstmt.close();
             connection.closeConnection();
 
@@ -123,6 +130,8 @@ public class DaoAnimales {
             return false;
         }
     }
+
+
 
 
     public  static int insertarAnimal(AnimalModel animal) {

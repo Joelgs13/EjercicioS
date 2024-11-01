@@ -12,10 +12,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -52,7 +54,7 @@ public class ListaDeAnimalesController {
     private TableColumn<AnimalModel, LocalDate> tcFecha;
 
     @FXML
-    private TableColumn<?, ?> tcId;
+    private TableColumn<AnimalModel, Integer> tcId;
 
     @FXML
     private TableColumn<AnimalModel, String> tcNombre;
@@ -136,89 +138,38 @@ public class ListaDeAnimalesController {
 
     @FXML
     void editarAnimal(ActionEvent event) {
-        try {
-            // Verificar si hay un animal seleccionado
-            AnimalModel animalSeleccionado = tablaAnimales.getSelectionModel().getSelectedItem();
-            if (animalSeleccionado == null) {
-                showAlert("Advertencia", "Debe seleccionar un animal de la lista para editar.", Alert.AlertType.INFORMATION);
-                return;
+        esAniadir = false; // Modo edición
+        AnimalModel animalSeleccionado = tablaAnimales.getSelectionModel().getSelectedItem();
+
+        if (animalSeleccionado != null) {
+            s = new Stage();
+            Scene scene;
+            try {
+                FXMLLoader controlador = new FXMLLoader(HelloApplication.class.getResource("aniadirEditarAnimal.fxml"));
+                scene = new Scene(controlador.load());
+                s.setTitle("EDITAR ANIMAL");
+                s.setScene(scene);
+
+                // Pasar el animal seleccionado al controlador de edición
+                AniadirEditarAnimalController controller = controlador.getController();
+                controller.setTablaAnimales(tablaAnimales);
+                controller.cargarAnimal(animalSeleccionado); // Cargar datos en el formulario
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            // Cargar el FXML de la pantalla de edición
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AniadirEditarAnimal.fxml"));
-            Parent root = loader.load();
-
-            // Configurar la ventana de edición como modal
-            Stage stage = new Stage();
-            stage.setTitle("Editar Animal");
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-
-            // Obtener el controlador de la ventana de edición y pasarle los datos actuales del animal
-            AniadirEditarAnimalController controlador = loader.getController();
-            controlador.setTablaAnimales(tablaAnimales);
-
-            // Llenar los campos del formulario con los datos actuales del animal
-            controlador.getTfNombre().setText(animalSeleccionado.getNombre());
-            controlador.getTfEspecie().setText(animalSeleccionado.getEspecie());
-            controlador.getTfRaza().setText(animalSeleccionado.getRaza());
-            controlador.getTfSexo().setText(animalSeleccionado.getSexo());
-            controlador.getTfEdad().setText(String.valueOf(animalSeleccionado.getEdad()));
-            controlador.getTfPeso().setText(String.valueOf(animalSeleccionado.getPeso()));
-            controlador.getTfObservaciones().setText(animalSeleccionado.getObservaciones());
-            controlador.getFechaPrimeraConsulta().setValue(animalSeleccionado.getFechaPrimeraConsulta());
-            controlador.setImagenBlob(animalSeleccionado.getFoto()); // Establece el Blob de imagen actual en el controlador
-
-            // Mostrar la ventana de edición
-            stage.showAndWait();
-
-            // Crear un nuevo objeto `animalModificado` con los datos actualizados desde el formulario
-            AnimalModel animalModificado = new AnimalModel(
-                    animalSeleccionado.getId(),
-                    controlador.getTfNombre().getText(),
-                    controlador.getTfEspecie().getText(),
-                    controlador.getTfRaza().getText(),
-                    controlador.getTfSexo().getText(),
-                    Integer.parseInt(controlador.getTfEdad().getText()),
-                    Integer.parseInt(controlador.getTfPeso().getText()),
-                    controlador.getTfObservaciones().getText(),
-                    controlador.getFechaPrimeraConsulta().getValue(),
-                    controlador.getImagenBlob()
-            );
-
-            // Validar que haya habido alguna modificación
-            if (animalSeleccionado.equals(animalModificado)) {
-                showAlert("Sin cambios", "No se realizaron modificaciones en el animal seleccionado.", Alert.AlertType.INFORMATION);
-                return;
-            }
-
-            // Intentar actualizar el animal en la base de datos
-            boolean actualizado = DaoAnimales.modificarAnimal(animalSeleccionado, animalModificado);
-
-            if (actualizado) {
-                // Actualizar los campos del objeto original para que se reflejen en la tabla
-                animalSeleccionado.setNombre(animalModificado.getNombre());
-                animalSeleccionado.setEspecie(animalModificado.getEspecie());
-                animalSeleccionado.setRaza(animalModificado.getRaza());
-                animalSeleccionado.setSexo(animalModificado.getSexo());
-                animalSeleccionado.setEdad(animalModificado.getEdad());
-                animalSeleccionado.setPeso(animalModificado.getPeso());
-                animalSeleccionado.setObservaciones(animalModificado.getObservaciones());
-                animalSeleccionado.setFechaPrimeraConsulta(animalModificado.getFechaPrimeraConsulta());
-                animalSeleccionado.setFoto(animalModificado.getFoto());
-
-                showAlert("Éxito", "El animal ha sido actualizado correctamente.", Alert.AlertType.INFORMATION);
-                tablaAnimales.refresh(); // Refrescar la tabla para mostrar los cambios
-            } else {
-                showAlert("Error", "No se pudo actualizar el animal. Inténtelo nuevamente.", Alert.AlertType.ERROR);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Error", "Ocurrió un error al intentar cargar la ventana de edición.", Alert.AlertType.ERROR);
-        } catch (NumberFormatException e) {
-            showAlert("Error", "Los campos de edad y peso deben ser números válidos.", Alert.AlertType.ERROR);
+            s.setResizable(false);
+            s.initOwner(HelloApplication.getStage());
+            s.initModality(Modality.WINDOW_MODAL);
+            s.showAndWait();
+            filtrarPorNombre();
+            tablaAnimales.refresh();
+        } else {
+            showAlert("Error", "Ningún animal seleccionado.", Alert.AlertType.ERROR);
         }
     }
+
 
 
     @FXML
