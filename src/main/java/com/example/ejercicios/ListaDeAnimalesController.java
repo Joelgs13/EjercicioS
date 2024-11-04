@@ -183,6 +183,7 @@ public class ListaDeAnimalesController {
             s.showAndWait();
             filtrarPorNombre();
             tablaAnimales.refresh();
+            initialize();
         } else {
             showAlert("Error", "Ningún animal seleccionado.", Alert.AlertType.ERROR);
         }
