@@ -89,7 +89,7 @@ public class AniadirEditarAnimalController {
             tablaAnimales.refresh();
             cerrarVentana(event);
         } else {
-            showAlert("Error", "No se pudo " + (isEsAniadir() ? "guardar" : "actualizar") + " el animal. Inténtelo nuevamente.", Alert.AlertType.ERROR);
+            showAlert("Error", "No se pudo " + (isEsAniadir() ? "guardar" : "actualizar") + " el animal. La imagen no es valida, prueba con una menos pesada.", Alert.AlertType.ERROR);
         }
         tablaAnimales.refresh();
         //no hay manera de actualizar la tabla al editar
