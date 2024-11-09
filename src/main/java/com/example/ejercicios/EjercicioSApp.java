@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Properties;
 
-public class HelloApplication extends Application {
+public class EjercicioSApp extends Application {
 
     static Stage stage; // Variable estática para almacenar la instancia del escenario principal
 
@@ -23,7 +23,7 @@ public class HelloApplication extends Application {
     public void start(Stage s) throws IOException {
         Properties connConfig = ConexionBBDD.loadProperties(); // Cargar la configuración de conexión a la base de datos
         stage = s; // Asignar el escenario principal
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("ListaDeAnimales.fxml")); // Cargar el archivo FXML
+        FXMLLoader fxmlLoader = new FXMLLoader(EjercicioSApp.class.getResource("ListaDeAnimales.fxml")); // Cargar el archivo FXML
         Scene scene = new Scene(fxmlLoader.load()); // Crear una escena con el contenido del archivo FXML
         stage.setResizable(false); // Desactivar la opción de redimensionar la ventana
         stage.setTitle("ANIMALES!"); // Establecer el título de la ventana

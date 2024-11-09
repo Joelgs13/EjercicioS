@@ -8,22 +8,19 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-import static com.example.ejercicios.HelloApplication.stage;
+import static com.example.ejercicios.EjercicioSApp.stage;
 
 /**
  * Controlador de la vista que muestra y gestiona la lista de animales.
@@ -96,7 +93,7 @@ public class ListaDeAnimalesController {
         s = new Stage();
         Scene scene;
         try {
-            FXMLLoader controlador = new FXMLLoader(HelloApplication.class.getResource("aniadirEditarAnimal.fxml"));
+            FXMLLoader controlador = new FXMLLoader(EjercicioSApp.class.getResource("aniadirEditarAnimal.fxml"));
             scene = new Scene(controlador.load());
             s.setTitle("AÑADIR ANIMAL");
             s.setScene(scene);
@@ -106,7 +103,7 @@ public class ListaDeAnimalesController {
             e.printStackTrace();
         }
         s.setResizable(false);
-        s.initOwner(HelloApplication.getStage());
+        s.initOwner(EjercicioSApp.getStage());
         s.initModality(javafx.stage.Modality.WINDOW_MODAL);
         s.showAndWait();
         filtrarPorNombre();
@@ -163,7 +160,7 @@ public class ListaDeAnimalesController {
             s = new Stage();
             Scene scene;
             try {
-                FXMLLoader controlador = new FXMLLoader(HelloApplication.class.getResource("aniadirEditarAnimal.fxml"));
+                FXMLLoader controlador = new FXMLLoader(EjercicioSApp.class.getResource("aniadirEditarAnimal.fxml"));
                 scene = new Scene(controlador.load());
                 s.setTitle("EDITAR ANIMAL");
                 s.setScene(scene);
@@ -178,7 +175,7 @@ public class ListaDeAnimalesController {
             }
 
             s.setResizable(false);
-            s.initOwner(HelloApplication.getStage());
+            s.initOwner(EjercicioSApp.getStage());
             s.initModality(Modality.WINDOW_MODAL);
             s.showAndWait();
             filtrarPorNombre();
