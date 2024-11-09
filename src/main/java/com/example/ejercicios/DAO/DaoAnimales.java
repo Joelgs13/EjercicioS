@@ -97,7 +97,16 @@ public class DaoAnimales {
             PreparedStatement pstmt = ConexionBBDD.getConnection().prepareStatement(select);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                AnimalModel modelo = new AnimalModel(rs.getInt("id"), rs.getString("nombre"), rs.getString("especie"), rs.getString("raza"), rs.getString("sexo"), rs.getInt("edad"), rs.getInt("peso"), rs.getString("observaciones"), rs.getDate("fecha_primera_consulta").toLocalDate(), rs.getBlob("foto"));
+                AnimalModel modelo = new AnimalModel(rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("especie"),
+                        rs.getString("raza"),
+                        rs.getString("sexo"),
+                        rs.getInt("edad"),
+                        rs.getInt("peso"),
+                        rs.getString("observaciones"),
+                        rs.getDate("fecha_primera_consulta").toLocalDate(),
+                        rs.getBlob("foto"));
                 modelo.setId(rs.getInt("id"));
                 lst.add(modelo);
             }
