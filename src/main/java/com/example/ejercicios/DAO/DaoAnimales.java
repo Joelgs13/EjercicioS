@@ -1,7 +1,7 @@
-package DAO;
+package com.example.ejercicios.DAO;
 
-import BBDD.ConexionBBDD;
-import MODEL.AnimalModel;
+import com.example.ejercicios.BBDD.ConexionBBDD;
+import com.example.ejercicios.MODEL.AnimalModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

@@ -1,4 +1,4 @@
-package BBDD;
+package com.example.ejercicios.BBDD;
 
 import java.io.FileInputStream;
 import java.io.IOException;

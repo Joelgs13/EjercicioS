@@ -1,8 +1,8 @@
 package com.example.ejercicios;
 
-import BBDD.ConexionBBDD;
-import DAO.DaoAnimales;
-import MODEL.AnimalModel;
+import com.example.ejercicios.BBDD.ConexionBBDD;
+import com.example.ejercicios.DAO.DaoAnimales;
+import com.example.ejercicios.MODEL.AnimalModel;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
@@ -93,7 +93,7 @@ public class ListaDeAnimalesController {
         s = new Stage();
         Scene scene;
         try {
-            FXMLLoader controlador = new FXMLLoader(EjercicioSApp.class.getResource("aniadirEditarAnimal.fxml"));
+            FXMLLoader controlador = new FXMLLoader(EjercicioSApp.class.getResource("fxml/aniadirEditarAnimal.fxml"));
             scene = new Scene(controlador.load());
             s.setTitle("AÑADIR ANIMAL");
             s.setScene(scene);
@@ -136,7 +136,7 @@ public class ListaDeAnimalesController {
             boolean eliminado = DaoAnimales.eliminarAnimal(animalSeleccionado);
 
             if (eliminado) {
-                // Si se eliminó de la BBDD, quitar de la tabla y mostrar mensaje de éxito
+                // Si se eliminó de la com.example.ejercicios.BBDD, quitar de la tabla y mostrar mensaje de éxito
                 tablaAnimales.getItems().remove(animalSeleccionado);
                 showAlert("Éxito", "El animal ha sido eliminado correctamente.", Alert.AlertType.INFORMATION);
             } else {

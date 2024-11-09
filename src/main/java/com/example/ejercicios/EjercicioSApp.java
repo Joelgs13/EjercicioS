@@ -1,6 +1,6 @@
 package com.example.ejercicios;
 
-import BBDD.ConexionBBDD;
+import com.example.ejercicios.BBDD.ConexionBBDD;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -23,7 +23,7 @@ public class EjercicioSApp extends Application {
     public void start(Stage s) throws IOException {
         Properties connConfig = ConexionBBDD.loadProperties(); // Cargar la configuración de conexión a la base de datos
         stage = s; // Asignar el escenario principal
-        FXMLLoader fxmlLoader = new FXMLLoader(EjercicioSApp.class.getResource("ListaDeAnimales.fxml")); // Cargar el archivo FXML
+        FXMLLoader fxmlLoader = new FXMLLoader(EjercicioSApp.class.getResource("fxml/ListaDeAnimales.fxml")); // Cargar el archivo FXML
         Scene scene = new Scene(fxmlLoader.load()); // Crear una escena con el contenido del archivo FXML
         stage.setResizable(false); // Desactivar la opción de redimensionar la ventana
         stage.setTitle("ANIMALES!"); // Establecer el título de la ventana

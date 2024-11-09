@@ -1,4 +1,4 @@
-package MODEL;
+package com.example.ejercicios.MODEL;
 
 import java.sql.Blob;
 import java.time.LocalDate;

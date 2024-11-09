@@ -1,7 +1,7 @@
 package com.example.ejercicios;
 
-import DAO.DaoAnimales;
-import MODEL.AnimalModel;
+import com.example.ejercicios.DAO.DaoAnimales;
+import com.example.ejercicios.MODEL.AnimalModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -13,7 +13,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 import static com.example.ejercicios.ListaDeAnimalesController.isEsAniadir;
 
